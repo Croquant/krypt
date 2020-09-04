@@ -81,8 +81,8 @@ void printhelp(void)
   printf("\nKrypter: Simple file encryption with password\n");
   printf("Usage:\n  krypter [OPTIONS]... [FILE]\n");
   printf("Options:\n");
-  printf("  -h               help message\n");
-  printf("  -f [filename]    file to encrypt (single file only no directories)\n");
-  printf("  -p [password]    password for encryption/decryption\n\n");
+  printf("  -h             help message\n");
+  printf("  -f [filename]  file to encrypt (single file only no directories)\n");
+  printf("  -p [password]  password for encryption/decryption\n\n");
   printf("Report bugs to: krypter@max1.me\n\n");
 }
