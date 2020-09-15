@@ -12,12 +12,44 @@
 #include "word.h"
 
 #define OPT_STRING "hf:p:"
+#define KEY_LENGTH 256
 
 char *filename;
 char *password;
 FILE *file;
 
+char key[KEY_LENGTH];
+
 void printhelp(void);
+
+void complete_key (char *key)
+{
+	key[KEY_LENGTH - 1] = 0;
+	int len = strlen(key);
+	printf("LENGTH: %d\n", len);
+	int i;
+	for (i = len; i < KEY_LENGTH; i++)
+	{
+		key[i] = key[i - 1] + key[i - 2];
+	}
+	key[KEY_LENGTH - 1] = 0;
+	key[KEY_LENGTH - 1] = get_checksum(key);
+}
+
+void shift_key (char *key, int n)
+{
+	int i;
+	for (i = 0; i < n; i ++)
+	{
+		char temp = key[0];
+		int j;
+		for (j = 0; j < KEY_LENGTH; j++)
+		{
+			key[j] = key[j + 1];
+		}
+		key[j] = temp;
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +88,7 @@ int main(int argc, char *argv[])
   {
     filename = argv[optind];
   }
-  if ((file = fopen(filename, "r")) == NULL)
+  if ((file = fopen(filename, "w")) == NULL)
   {
     fprintf(stderr, "ERROR: cannot open file %s\n", filename);
     exit(EXIT_FAILURE);
@@ -70,6 +102,12 @@ int main(int argc, char *argv[])
 
   printf("FILE: %s\n", filename);
   printf("PASS: %s\n", password);
+
+	// 14/09/2020 test for making key
+	strcpy(key, password);
+	complete_key(key);
+	shift_key(key, key[KEY_LENGTH - 1]);
+	fwrite(key, KEY_LENGTH, 1, file);
 
   fclose(file);
 
